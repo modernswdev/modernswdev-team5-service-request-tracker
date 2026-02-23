@@ -110,7 +110,7 @@ A staff member responsible for reviewing, managing, and resolving submitted serv
 - Admin/Staff can update service request status (Open, In Progress, Resolved/Closed)
 
 ### 4. Sorting/Filtering
--Admin/Staff can sort or filter requests by status and/or priority to find request items quickly
+- Admin/Staff can sort or filter requests by status and/or priority to find request items quickly
 
 ### 5. View request details
--Admin/Staff can open a request to see full details including description, priority, and timestamps
+- Admin/Staff can open a request to see full details including description, priority, and timestamps
