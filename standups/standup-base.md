@@ -1,0 +1,6 @@
+# Sprint [SPRINT_NUMBER] Standup [STANDUP_NUMBER]
+## Date: [DATE] (Week [CURRENT_WEEK])
+### [NAME]
+- Completed: [WHAT_YOU_COMPLETED]
+- Next: [WHAT_YOU_ARE_CURRENTLY_WORKING_ON]
+- Blockers: [ANY_BLOCKERS]
