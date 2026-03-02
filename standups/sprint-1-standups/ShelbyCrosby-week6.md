@@ -1,0 +1,8 @@
+Sprint [1] 
+Standup [1] 
+Date: [3/2/2026] 
+Week [Week 6]
+[Shelby Crosby] 
+Completed: [Reviewed the project board and available issues Assigned myself to generate testing datasets. ] 
+Next: [talk to my team about what columns we need in our User.csv and Service_requests.csv files] 
+Blockers: [None so far]
