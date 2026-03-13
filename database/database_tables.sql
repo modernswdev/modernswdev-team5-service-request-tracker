@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS Users
 	UserLastName	TEXT		,
 	UserEmail	TEXT		NOT NULL UNIQUE,
 	UserPassword	TEXT		NOT NULL,
-	UserRole	INTEGER		NOT NULL CHECK(UserRole >= 0 AND UserRole <= 2) DEFAULT 0, -- 0 = User, 1 = Staff, 2 = Admin --
+	UserRole	INTEGER		NOT NULL CHECK(UserRole >= 0 AND UserRole <= 3) DEFAULT 0, -- 0 = No Login, 1 = User, 2 = Staff, 3 = Admin --
 	UserCreateDate	TEXT		DEFAULT CURRENT_TIMESTAMP,
 	CONSTRAINT	Users_PK	PRIMARY KEY(UserID)
 	-- Spiritual Foreign Key - The foreign keys don't work the way I wanted them to, so refer to this for triggers. --
@@ -29,6 +29,9 @@ BEGIN
     WHERE old.UserID = Requests.RequestCreatorID
   );
 END;
+
+INSERT INTO Users(UserID, UserFirstName, UserLastName, UserEmail, UserPassword)
+VALUES(0, "No", "Account", "email", "password");
 
 CREATE TABLE IF NOT EXISTS Requests
 (
