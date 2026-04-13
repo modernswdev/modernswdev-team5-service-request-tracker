@@ -1,6 +1,7 @@
 import pytest
 import sqlite3
-from backend.requests import (get_connection, view_requests, create_request, update_status, sort_by_priority, filter_by_status)
+from backend.setup import (get_connection)
+from backend.requests import (view_requests, create_request, update_status, sort_by_priority, filter_by_status)
 
 def test_get_connection_without_error():
     connection = get_connection()
