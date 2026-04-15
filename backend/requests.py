@@ -411,7 +411,7 @@ def read_datasets():
                 priority_converted = 7.5
             cursor.execute(
                 """
-                INSERT INTO Requests (RequestID, RequestTitle, RequestBody, RequestStatus, RequestPriority, RequestCreatorID, RequestCreateDate, RequestModifyDate)
+                INSERT OR IGNORE INTO Requests (RequestID, RequestTitle, RequestBody, RequestStatus, RequestPriority, RequestCreatorID, RequestCreateDate, RequestModifyDate)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?)
                 """,
                 (int(row[0]), row[1], row[2], status_converted, priority_converted, int(row[7]), row[5], row[6])
@@ -421,7 +421,7 @@ def read_datasets():
             if (row[8] != ""):
                 cursor.execute(
                     """
-                    INSERT INTO Assignees (AssigneeRequestID, AssigneeHandlerID)
+                    INSERT OR IGNORE INTO Assignees (AssigneeRequestID, AssigneeHandlerID)
                     VALUES (?, ?)
                     """,
                     (int(row[0]), int(row[8]))
@@ -451,10 +451,6 @@ def read_datasets():
     cursor.close()
     connection.close()
 
-
-prepare_database()
-read_datasets()
-# End of my addition. - Matthew Ingram
 
 if __name__ == "__main__":
     prepare_database()
