@@ -5,7 +5,9 @@ DB_PATH = "database/service_requests.db"
 
 
 def get_connection():
-    return sqlite3.connect(DB_PATH)
+    connection = sqlite3.connect(DB_PATH)
+    connection.row_factory = sqlite3.Row
+    return connection
 
 def validate_credentials(email, password):
     connection = get_connection()
@@ -233,7 +235,7 @@ def create_request(title, body, priority, requester_email=None, requester_passwo
 
     priority_value = priority_str_to_num(priority)
     if priority_value is None:
-        return None
+        raise sqlite3.Error("Invalid priority value")
 
     creator_id = 0
     if requester_email is not None and requester_password is not None:
@@ -259,11 +261,11 @@ def create_request(title, body, priority, requester_email=None, requester_passwo
 
 def update_status(request_id, new_status, requester_email=None, requester_password=None):
     if not has_required_role(2, requester_email, requester_password):
-        return None
+        return False
 
     status_value = status_str_to_int(new_status)
     if status_value is None:
-        return None
+        return False
 
     conn = get_connection()
     cursor = conn.cursor()
@@ -282,7 +284,9 @@ def update_status(request_id, new_status, requester_email=None, requester_passwo
     conn.close()
 
     if updated_rows == 0:
-        return None
+        return False
+
+    return True
 
     return view_request_details(request_id)
 
@@ -321,11 +325,11 @@ def sort_by_priority(requester_email=None, requester_password=None):
 
 def filter_by_status(status_value, requester_email=None, requester_password=None):
     if not has_required_role(1, requester_email, requester_password):
-        return []
+        return 0
 
     status_value_int = status_str_to_int(status_value)
     if status_value_int is None:
-        return []
+        return 0
 
     conn = get_connection()
     cursor = conn.cursor()
@@ -354,25 +358,6 @@ def filter_by_status(status_value, requester_email=None, requester_password=None
     rows = cursor.fetchall()
     conn.close()
     return len(rows)  # Added for unit testing. - Matthew Ingram
-
-
-def status_int_to_str(status_int):
-    if status_int == 0:
-        return "Open"
-    elif status_int == 1:
-        return "In Progress"
-    elif status_int == 2:
-        return "Resolved"
-
-def role_int_to_str(role_int):
-    if role_int == 0:
-        return "No Login"
-    elif role_int == 1:
-        return "User"
-    elif role_int == 2:
-        return "Staff"
-    elif role_int == 3:
-        return "Admin"
 
 # Prepare database. - Matthew Ingram
 def prepare_database():
@@ -442,7 +427,7 @@ def read_datasets():
                 role_converted = 3
             cursor.execute(
                 """
-                INSERT INTO Users (UserID, UserFirstName, UserLastName, UserEmail, UserPassword, UserRole, UserCreateDate)
+                INSERT OR IGNORE INTO Users (UserID, UserFirstName, UserLastName, UserEmail, UserPassword, UserRole, UserCreateDate)
                 VALUES (?, ?, ?, ?, ?, ?, ?)
                 """,
                 (int(row[0]), row[1], row[2], row[3], "password" + str(row[0]), role_converted, row[5])
