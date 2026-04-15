@@ -102,7 +102,3 @@ def read_datasets():
     cursor.close()
     connection.close()
     print("Datasets read")
-
-if __name__ == "__main__":
-    prepare_database()
-    read_datasets()
