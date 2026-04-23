@@ -1,6 +1,27 @@
 services:
-  web:
-    build: .
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
     pull_policy: build
+    environment:
+      - DATABASE_PATH=/app/data/service_requests.db
+    ports:
+      - "8000:8000"
+    volumes:
+      - backend_data:/app/data
+
+  web:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+    pull_policy: build
+    environment:
+      - VITE_API_BASE_URL=http://localhost:8000
+    depends_on:
+      - backend
     ports:
       - "5173:5173"
+
+volumes:
+  backend_data:

@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom"
 import Card from "../components/Card.jsx"
 import Navbar from "../components/Navbar.jsx"
 import dotsIcon from "../assets/dots.svg"
+import { apiFetch } from "../lib/api.js"
 import colors from "../colors"
 
 const status_order = ["Open", "In Progress", "Closed"]
@@ -62,14 +63,27 @@ const status_pills = {
 
 export default function Dashboard() {
   const [requests, setRequests] = useState([])
-  const [query, setQuery] = useState("")
-  const [statusFilter, setStatusFilter] = useState("All")
+  const [error, setError] = useState("")
+  const query = ""
+  const statusFilter = "All"
   const navigate = useNavigate()
 
   useEffect(() => {
-    fetch("http://localhost:8000/requests")
-      .then((res) => res.json())
-      .then((data) => setRequests(data))
+    let isMounted = true
+    apiFetch("/requests").then((data) => {
+        if (isMounted) {
+          setRequests(data)
+        }
+      })
+      .catch((requestError) => {
+        if (isMounted) {
+          setError(requestError.message || "Unable to load requests")
+        }
+      })
+
+    return () => {
+      isMounted = false
+    }
   }, [])
 
   const filteredRequests = useMemo(() => {
@@ -168,6 +182,17 @@ export default function Dashboard() {
   return (
     <Card>
       <Navbar />
+      {error && (
+        <div style={{
+          padding: "1rem",
+          backgroundColor: colors.redBg,
+          color: colors.red,
+          borderRadius: "0.5rem",
+          margin: "1rem 2.5rem 0"
+        }}>
+          {error}
+        </div>
+      )}
       <div style={{padding: "2rem 2.5rem 2.5rem", backgroundColor: colors.lgBackground}}>
         <div style={{display: "flex", justifyContent: "space-between", alignItems: "center"}}>
           <h2 style={{fontSize: "1.6rem", fontWeight: 700, color: colors.textMain}}>Dashboard</h2>

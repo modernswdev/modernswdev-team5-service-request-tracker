@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react"
 import { Link, useParams } from "react-router-dom"
 import Card from "../components/Card.jsx"
 import Navbar from "../components/Navbar.jsx"
+import { apiFetch } from "../lib/api.js"
 import colors from "../colors"
 
 const priorityColors = {
@@ -57,16 +58,11 @@ export default function RequestDetails() {
 
   useEffect(() => {
     let isMounted = true
-    fetch(`http://localhost:8000/requests/${id}`)
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error("Request not found")
-        }
-        return res.json()
-      })
+    apiFetch(`/requests/${id}`)
       .then((data) => {
         if (isMounted) {
           setRequest(data)
+          setError("")
         }
       })
       .catch((err) => {
@@ -81,16 +77,15 @@ export default function RequestDetails() {
 
   const updateStatus = async (newStatus) => {
     try {
-      const response = await fetch(`http://localhost:8000/requests/${id}/status?new_status=${encodeURIComponent(newStatus)}`, {
+      const response = await apiFetch(`/requests/${id}/status`, {
         method: 'PUT',
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({new_status: newStatus}),
       })
-      
-      if (!response.ok) {
-        throw new Error('Failed to update status')
-      }
-      
-      // Update local state
-      setRequest(prev => prev ? { ...prev, status: newStatus } : null)
+      setRequest(response.request)
+      setError("")
     } catch (err) {
       setError(err.message || 'Failed to update status')
     }
@@ -101,8 +96,8 @@ export default function RequestDetails() {
     return allStatuses.filter(s => s !== status)
   }
 
-  const status = useMemo(() => normalizeStatus(request?.status), [request])
-  const priority = useMemo(() => normalizePriority(request?.priority), [request])
+  const status = normalizeStatus(request?.status)
+  const priority = normalizePriority(request?.priority)
 
   const sectionStyle = {
     backgroundColor: colors.surface,

@@ -30,7 +30,7 @@ BEGIN
   );
 END;
 
-INSERT INTO Users(UserID, UserFirstName, UserLastName, UserEmail, UserPassword)
+INSERT OR IGNORE INTO Users(UserID, UserFirstName, UserLastName, UserEmail, UserPassword)
 VALUES(0, "No", "Account", "email", "password");
 
 CREATE TABLE IF NOT EXISTS Requests
