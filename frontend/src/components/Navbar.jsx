@@ -1,4 +1,4 @@
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import colors from "../colors";
 import homeIcon from "../assets/white-home.svg";
 import userIcon from "../assets/Sample_User_Icon.svg";
@@ -11,18 +11,25 @@ const iconStyle = {
 };
 
 function DashboardIcon() {
-  return (<img src={homeIcon} alt="" aria-hidden="true" style={iconStyle} />);
+  return <img src={homeIcon} alt="" aria-hidden="true" style={iconStyle} />;
 }
 
 function UserIcon() {
-  return (<img src={userIcon} alt="" aria-hidden="true" style={iconStyle} />);
+  return <img src={userIcon} alt="" aria-hidden="true" style={iconStyle} />;
 }
 
 function LogoutIcon() {
-  return (<img src={logoutIcon} alt="" aria-hidden="true" style={iconStyle} />);
+  return <img src={logoutIcon} alt="" aria-hidden="true" style={iconStyle} />;
 }
 
 export default function Navbar({ userName = "Admin" }) {
+  const navigate = useNavigate();
+
+  function handleLogout() {
+    localStorage.removeItem("user");
+    navigate("/");
+  }
+
   const navStyle = {
     display: "flex",
     alignItems: "center",
@@ -38,6 +45,13 @@ export default function Navbar({ userName = "Admin" }) {
     fontWeight: 700,
     letterSpacing: "0.2px",
     color: colors.textMain,
+    textDecoration: "none",
+  };
+
+  const navLinksStyle = {
+    display: "flex",
+    alignItems: "center",
+    gap: "0.5rem",
   };
 
   const base = {
@@ -50,15 +64,37 @@ export default function Navbar({ userName = "Admin" }) {
     letterSpacing: "0.1px",
     color: colors.textMuted,
     backgroundColor: "transparent",
+    textDecoration: "none",
+    borderRadius: "8px",
+    border: "none",
+    cursor: "pointer",
   };
 
   return (
     <header style={navStyle}>
-      <Link to="/home" style={titleStyle} aria-label="Service Request Tracker"> Service Request Tracker </Link>
-      <nav>
-        <Link to="/home" style={base}> <DashboardIcon/> Dashboard </Link>
-        <div style={base}> <UserIcon/> {userName} </div>
-        <Link to="/" style={base}> <LogoutIcon/> Logout </Link>
+      <Link to="/home" style={titleStyle} aria-label="Service Request Tracker">
+        Service Request Tracker
+      </Link>
+
+      <nav style={navLinksStyle}>
+        <Link to="/home" style={base}>
+          <DashboardIcon />
+          Dashboard
+        </Link>
+
+        <Link to="/create" style={base}>
+          Create Request
+        </Link>
+
+        <div style={base}>
+          <UserIcon />
+          {userName}
+        </div>
+
+        <button onClick={handleLogout} style={base}>
+          <LogoutIcon />
+          Logout
+        </button>
       </nav>
     </header>
   );

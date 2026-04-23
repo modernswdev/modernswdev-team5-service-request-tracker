@@ -42,3 +42,8 @@
 
 # Database files
 database/*.db 
+__pycache__/
+*.pyc
+
+frontend/node_modules/
+node_modules/

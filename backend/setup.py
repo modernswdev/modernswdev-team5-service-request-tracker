@@ -103,6 +103,7 @@ def read_datasets():
     connection.close()
     print("Datasets read")
 
-prepare_database()
-read_datasets()
-# End of my addition. - Matthew Ingram
+if __name__ == "__main__":
+    prepare_database()
+    read_datasets()
+    print("Database prepared and datasets loaded.")

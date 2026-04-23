@@ -4,6 +4,7 @@ import Card from "../components/Card.jsx"
 import Navbar from "../components/Navbar.jsx"
 import dotsIcon from "../assets/dots.svg"
 import colors from "../colors"
+import { useNavigate } from "react-router-dom";
 
 const status_order = ["Open", "In Progress", "Closed"]
 
@@ -170,7 +171,9 @@ export default function Dashboard() {
       <div style={{padding: "2rem 2.5rem 2.5rem", backgroundColor: colors.lgBackground}}>
         <div>
           <h2 style={{fontSize: "1.6rem", fontWeight: 700, color: colors.textMain}}>Dashboard</h2>
+      
         </div>
+
         <div style={{ display: "grid", gap: "1.5rem" }}>
           {status_order.map((status) => {
             const rows = grouped[status]
