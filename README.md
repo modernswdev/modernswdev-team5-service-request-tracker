@@ -7,6 +7,28 @@
 - Xander Parker - Have not recieved handle from student
 - Khangai Altangerel - kaltangerel
 
+## Local Dev Setup
+
+### What now works
+- FastAPI backend is connected to SQLite and seeded from `datasets/`.
+- React frontend calls live backend endpoints for login, list, details, create, and status updates.
+- Docker Compose runs both frontend and backend locally.
+
+### Run with Docker
+1. `docker compose up --build`
+2. Open `http://localhost:5173`
+
+### Run without Docker
+1. Backend:
+   - `python -m pip install -r requirements.txt`
+   - `python -m backend.init_db`
+   - `python -m uvicorn backend.main:app --reload --host 0.0.0.0 --port 8000`
+2. Frontend (new terminal):
+   - `cd frontend`
+   - `npm install`
+   - `npm run dev`
+3. Open `http://localhost:5173`
+
 The different **Scrum Masters** throughout the sprints so far are as follows:
 - Sprint 1 - Matthew Ingram
 - Sprint 2 - Shelby Crosby
